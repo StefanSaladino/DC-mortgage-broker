@@ -1,17 +1,30 @@
 /* =========================================================
    HOME PAGE - DAVID COLAVITA MORTGAGE SITE
-   Purpose: premium mortgage landing page with less box-heavy layout.
+   Purpose:
+   - Page-specific sections for the home/landing page.
+   - Mobile-first structure with desktop enhancements.
+   - Layout preserved from the current build.
+========================================================= */
+
+/* =========================================================
+   HERO
 ========================================================= */
 
 .hero {
   position: relative;
-  min-height: 92vh;
+  min-height: 88vh;
   display: grid;
   align-items: center;
   overflow: hidden;
   background:
-    linear-gradient(90deg, rgba(5, 5, 8, 0.98) 0%, rgba(5, 5, 8, 0.9) 30%, rgba(5, 5, 8, 0.4) 64%, rgba(5, 5, 8, 0.1) 100%),
-    url("../images/hero-david-colavita-banner.v1.webp") center / cover no-repeat;
+    linear-gradient(
+      90deg,
+      rgba(5, 5, 8, 0.98) 0%,
+      rgba(5, 5, 8, 0.9) 30%,
+      rgba(5, 5, 8, 0.4) 64%,
+      rgba(5, 5, 8, 0.1) 100%
+    ),
+    url("../images/hero-david-colavita-banner.v1.webp") 66% center / cover no-repeat;
 }
 
 .hero::after {
@@ -19,17 +32,17 @@
   position: absolute;
   inset: auto 0 0;
   height: 35%;
-  background: linear-gradient(180deg, transparent, var(--bg));
   pointer-events: none;
+  background: linear-gradient(180deg, transparent, var(--bg));
 }
 
 .hero__shade {
   position: absolute;
   inset: 0;
+  pointer-events: none;
   background:
     radial-gradient(circle at 22% 46%, rgba(159, 52, 255, 0.18), transparent 23%),
     radial-gradient(circle at 70% 24%, rgba(111, 53, 255, 0.14), transparent 25%);
-  pointer-events: none;
 }
 
 .hero__inner {
@@ -37,7 +50,7 @@
   z-index: 2;
   display: grid;
   align-items: center;
-  min-height: 92vh;
+  min-height: 88vh;
   padding: calc(var(--header-total-height) + 3rem) 0 4rem;
 }
 
@@ -68,6 +81,11 @@
   margin-top: 2rem;
 }
 
+.hero__actions .btn,
+.hero__actions .text-link {
+  width: 100%;
+}
+
 /* =========================================================
    TRUST STRIP
 ========================================================= */
@@ -76,21 +94,27 @@
   position: relative;
   padding: 2rem 0;
   overflow: hidden;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   background:
     radial-gradient(circle at 15% 50%, rgba(159, 52, 255, 0.2), transparent 25%),
     linear-gradient(180deg, #050508, #080710);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .trust-strip::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(110deg, transparent 0%, rgba(159, 52, 255, 0.18) 48%, transparent 70%);
   transform: translateX(-100%);
-  animation: trustSweep 7s ease-in-out infinite;
+  background:
+    linear-gradient(
+      110deg,
+      transparent 0%,
+      rgba(159, 52, 255, 0.18) 48%,
+      transparent 70%
+    );
   opacity: 0.7;
+  animation: trustSweep 7s ease-in-out infinite;
 }
 
 .trust-strip__inner {
@@ -157,7 +181,7 @@
 
 .pathway-feature {
   position: relative;
-  min-height: 34rem;
+  min-height: 28rem;
   display: grid;
   align-items: end;
   overflow: hidden;
@@ -168,11 +192,13 @@
 .pathway-feature__image {
   position: absolute;
   inset: 0;
+  transform: scale(1.01);
   background:
     linear-gradient(180deg, rgba(5, 5, 8, 0.1), rgba(5, 5, 8, 0.92)),
     url("../images/hero-david-colavita-banner.v1.webp") center / cover no-repeat;
-  transform: scale(1.01);
-  transition: transform 0.6s ease, filter 0.6s ease;
+  transition:
+    transform 0.6s ease,
+    filter 0.6s ease;
 }
 
 .pathway-feature:hover .pathway-feature__image {
@@ -231,6 +257,25 @@
     transform 0.2s ease;
 }
 
+.pathway-row:hover,
+.pathway-row:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(159, 52, 255, 0.18);
+  background: rgba(159, 52, 255, 0.07);
+}
+
+.pathway-row.is-active {
+  border-color: rgba(159, 52, 255, 0.28);
+  background:
+    linear-gradient(135deg, rgba(159, 52, 255, 0.14), rgba(111, 53, 255, 0.07)),
+    rgba(255, 255, 255, 0.72);
+  box-shadow: 0 1rem 2.2rem rgba(31, 20, 48, 0.08);
+}
+
+.pathway-row::after {
+  content: none;
+}
+
 .pathway-row__icon {
   display: grid;
   place-items: center;
@@ -241,7 +286,18 @@
   color: var(--accent-2);
   font-size: 0.78rem;
   font-weight: 900;
-  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.pathway-row:hover .pathway-row__icon,
+.pathway-row:focus-visible .pathway-row__icon,
+.pathway-row.is-active .pathway-row__icon {
+  transform: scale(1.05);
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: var(--white);
 }
 
 .pathway-row strong,
@@ -258,33 +314,6 @@
   color: var(--muted-dark);
   font-size: 0.9rem;
   line-height: 1.5;
-}
-
-.pathway-row::after {
-  content: none;
-}
-
-.pathway-row:hover,
-.pathway-row:focus-visible {
-  transform: translateY(-1px);
-  background: rgba(159, 52, 255, 0.07);
-  border-color: rgba(159, 52, 255, 0.18);
-}
-
-.pathway-row:hover .pathway-row__icon,
-.pathway-row:focus-visible .pathway-row__icon,
-.pathway-row.is-active .pathway-row__icon {
-  transform: scale(1.05);
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  color: var(--white);
-}
-
-.pathway-row.is-active {
-  background:
-    linear-gradient(135deg, rgba(159, 52, 255, 0.14), rgba(111, 53, 255, 0.07)),
-    rgba(255, 255, 255, 0.72);
-  border-color: rgba(159, 52, 255, 0.28);
-  box-shadow: 0 1rem 2.2rem rgba(31, 20, 48, 0.08);
 }
 
 /* =========================================================
@@ -329,18 +358,23 @@
   background: rgba(255, 255, 255, 0.035);
 }
 
-.calculator-form {
+.calculator-form,
+.calculator-results,
+.field-grid,
+.field-group {
   display: grid;
+}
+
+.calculator-form,
+.calculator-results {
   gap: 1rem;
 }
 
 .field-grid {
-  display: grid;
   gap: 1rem;
 }
 
 .field-group {
-  display: grid;
   gap: 0.45rem;
 }
 
@@ -408,14 +442,35 @@ select:focus {
   font-weight: 800;
 }
 
+.input-wrap input[type="number"] {
+  appearance: textfield;
+}
+
 .input-wrap input[type="number"]::-webkit-outer-spin-button,
 .input-wrap input[type="number"]::-webkit-inner-spin-button {
   margin: 0;
   appearance: none;
 }
 
-.input-wrap input[type="number"] {
-  appearance: textfield;
+.input-wrap--suffix {
+  padding-right: 0.95rem;
+}
+
+.input-wrap--suffix input {
+  text-align: left;
+}
+
+.input-wrap--split output {
+  min-width: 3.4rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem 0.45rem;
+  border-radius: 999px;
+  background: rgba(159, 52, 255, 0.16);
+  color: #e8d2ff;
+  font-size: 0.78rem;
+  line-height: 1;
 }
 
 select {
@@ -433,27 +488,6 @@ select {
 select option {
   background: #11101a;
   color: var(--white);
-}
-
-.input-wrap--suffix {
-  padding-right: 0.95rem;
-}
-
-.input-wrap--suffix input {
-  text-align: left;
-}
-
-.input-wrap--split output {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 3.4rem;
-  padding: 0.25rem 0.45rem;
-  border-radius: 999px;
-  background: rgba(159, 52, 255, 0.16);
-  color: #e8d2ff;
-  font-size: 0.78rem;
-  line-height: 1;
 }
 
 .toggle-row {
@@ -478,8 +512,6 @@ select option {
 }
 
 .calculator-results {
-  display: grid;
-  gap: 1rem;
   align-content: start;
 }
 
@@ -557,8 +589,12 @@ select option {
 
 .about__image {
   position: relative;
+  width: min(82vw, 21rem);
+  max-width: 21rem;
+  justify-self: center;
+  margin-inline: auto;
   overflow: hidden;
-  border-radius: var(--radius-lg);
+  border-radius: 4px;
   background: linear-gradient(135deg, rgba(159, 52, 255, 0.22), transparent);
   box-shadow: var(--shadow);
 }
@@ -567,15 +603,17 @@ select option {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, transparent 65%, rgba(5, 5, 8, 0.58));
   pointer-events: none;
+  background: linear-gradient(180deg, transparent 65%, rgba(5, 5, 8, 0.58));
 }
 
 .about__image img {
   width: 100%;
-  max-height: 42rem;
+  max-height: 25rem;
   object-fit: cover;
   object-position: center top;
+  border: 8px outset black;
+  border-radius: 4px;
 }
 
 .about__content p:not(.eyebrow),
@@ -607,22 +645,15 @@ select option {
 .credential-card {
   display: grid;
   gap: 1rem;
-  padding: 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.11);
-  border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, 0.04);
 }
 
 .credential-card img {
   width: min(24rem, 100%);
-  padding: 0.65rem 0.75rem;
-  border-radius: 0.45rem;
-  background:
-    linear-gradient(135deg, rgba(238, 232, 248, 0.72), rgba(204, 190, 226, 0.52));
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  box-shadow:
-    0 0.8rem 1.8rem rgba(0, 0, 0, 0.18),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 .credential-card p {
@@ -633,6 +664,7 @@ select option {
 
 /* =========================================================
    REALTORS / RESOURCES
+   Realtor styles are retained in case the section is re-added.
 ========================================================= */
 
 .realtors,
@@ -641,19 +673,22 @@ select option {
   color: var(--text-dark);
 }
 
-.realtors__grid {
-  display: grid;
-  gap: 2rem;
-}
-
+.realtors__grid,
 .realtor-steps,
-.resource-grid {
+.resource-grid,
+.resources__top {
   display: grid;
   gap: 1rem;
 }
 
-/* Simple card treatment.
-   Keeps the original layout, but adds a clean border, radius, and light shading. */
+.realtors__grid {
+  gap: 2rem;
+}
+
+.resources__top {
+  margin-bottom: 2rem;
+}
+
 .step,
 .resource-card {
   padding: 1.25rem;
@@ -706,10 +741,71 @@ select option {
   color: var(--muted-dark);
 }
 
-.resources__top {
+/* =========================================================
+   NEWSLETTER
+========================================================= */
+
+.newsletter {
+  background: #ffffff;
+  color: var(--text-dark);
+}
+
+.newsletter__shell {
+  display: grid;
+  gap: 1.5rem;
+  align-items: center;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border: 1px solid rgba(31, 20, 48, 0.12);
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(circle at 90% 12%, rgba(159, 52, 255, 0.14), transparent 30%),
+    linear-gradient(135deg, #ffffff, #f7f4fb);
+  box-shadow: 0 1.4rem 3.4rem rgba(31, 20, 48, 0.08);
+}
+
+.newsletter__copy {
+  max-width: 42rem;
+}
+
+.newsletter__copy p:not(.eyebrow) {
+  color: var(--muted-dark);
+}
+
+.newsletter .fine-print {
+  color: rgba(31, 20, 48, 0.58);
+}
+
+.newsletter-form {
   display: grid;
   gap: 1rem;
-  margin-bottom: 2rem;
+  padding: clamp(1rem, 2vw, 1.35rem);
+  border: 1px solid rgba(31, 20, 48, 0.12);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.76);
+}
+
+.newsletter-form .form-field label,
+.newsletter-form .form-consent {
+  color: var(--muted-dark);
+}
+
+.newsletter-form .form-field input {
+  width: 100%;
+  min-height: 3.2rem;
+  padding: 0.85rem 0.95rem;
+  border: 1px solid rgba(31, 20, 48, 0.14);
+  border-radius: 0.85rem;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--text-dark);
+  outline: 0;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.newsletter-form .form-field input:focus {
+  border-color: rgba(159, 52, 255, 0.5);
+  box-shadow: 0 0 0 4px rgba(159, 52, 255, 0.12);
 }
 
 /* =========================================================
@@ -744,6 +840,11 @@ select option {
   gap: 0.85rem;
 }
 
+.final-cta__actions .btn,
+.final-cta__actions .text-link {
+  width: 100%;
+}
+
 /* =========================================================
    MORTGAGE INQUIRY NETLIFY FORM MODAL
 ========================================================= */
@@ -766,7 +867,7 @@ body.form-modal-open {
   display: grid;
   align-items: start;
   justify-items: center;
-  padding: calc(var(--header-total-height) + 1.35rem) 1rem 1.5rem;
+  padding: calc(var(--header-total-height) + 0.85rem) 0.75rem 0.75rem;
   overflow-y: auto;
 }
 
@@ -784,12 +885,12 @@ body.form-modal-open {
   position: relative;
   z-index: 1;
   width: min(100%, 46rem);
-  max-height: calc(100vh - var(--header-total-height) - 2.85rem);
+  max-height: calc(100vh - var(--header-total-height) - 1.6rem);
+  padding: clamp(1.2rem, 4vw, 2rem);
   overflow-y: auto;
   scrollbar-gutter: stable;
-  padding: clamp(1.2rem, 4vw, 2rem);
   border: 1px solid rgba(255, 255, 255, 0.13);
-  border-radius: var(--radius-lg);
+  border-radius: 1.25rem;
   background:
     radial-gradient(circle at 85% 10%, rgba(159, 52, 255, 0.24), transparent 28%),
     linear-gradient(135deg, #0a0911, #161321 55%, #08070d);
@@ -797,14 +898,12 @@ body.form-modal-open {
   box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.45);
 }
 
-/* Sleeker modal scrollbar for Firefox. */
 .mortgage-form-modal,
 .mortgage-form-modal__panel {
   scrollbar-width: thin;
   scrollbar-color: rgba(198, 140, 255, 0.52) rgba(255, 255, 255, 0.06);
 }
 
-/* Sleeker modal scrollbar for Chrome, Edge, and Safari. */
 .mortgage-form-modal::-webkit-scrollbar,
 .mortgage-form-modal__panel::-webkit-scrollbar {
   width: 0.55rem;
@@ -812,20 +911,22 @@ body.form-modal-open {
 
 .mortgage-form-modal::-webkit-scrollbar-track,
 .mortgage-form-modal__panel::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.06);
   border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .mortgage-form-modal::-webkit-scrollbar-thumb,
 .mortgage-form-modal__panel::-webkit-scrollbar-thumb {
   border: 2px solid rgba(8, 7, 14, 0.96);
   border-radius: 999px;
-  background: linear-gradient(180deg, rgba(216, 180, 255, 0.75), rgba(159, 52, 255, 0.65));
+  background:
+    linear-gradient(180deg, rgba(216, 180, 255, 0.75), rgba(159, 52, 255, 0.65));
 }
 
 .mortgage-form-modal::-webkit-scrollbar-thumb:hover,
 .mortgage-form-modal__panel::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, rgba(232, 210, 255, 0.9), rgba(159, 52, 255, 0.8));
+  background:
+    linear-gradient(180deg, rgba(232, 210, 255, 0.9), rgba(159, 52, 255, 0.8));
 }
 
 .mortgage-form-modal__close {
@@ -859,18 +960,18 @@ body.form-modal-open {
   color: rgba(255, 255, 255, 0.72);
 }
 
-.mortgage-form {
+.mortgage-form,
+.mortgage-form__grid,
+.form-field {
   display: grid;
-  gap: 1rem;
 }
 
+.mortgage-form,
 .mortgage-form__grid {
-  display: grid;
   gap: 1rem;
 }
 
 .form-field {
-  display: grid;
   gap: 0.45rem;
 }
 
@@ -973,18 +1074,62 @@ body.form-modal-open .privacy-banner {
 ========================================================= */
 
 @keyframes trustSweep {
-  0%, 35% {
+  0%,
+  35% {
     transform: translateX(-100%);
   }
 
-  65%, 100% {
+  65%,
+  100% {
     transform: translateX(100%);
   }
 }
 
 /* =========================================================
-   RESPONSIVE
+   RESPONSIVE ENHANCEMENTS
 ========================================================= */
+
+@media (min-width: 521px) {
+  .mortgage-form-modal {
+    padding: calc(var(--header-total-height) + 1.35rem) 1rem 1.5rem;
+  }
+
+  .mortgage-form-modal__panel {
+    max-height: calc(100vh - var(--header-total-height) - 2.85rem);
+    border-radius: var(--radius-lg);
+  }
+}
+
+@media (min-width: 641px) {
+  .hero {
+    min-height: 92vh;
+    background-position: center;
+  }
+
+  .hero__inner {
+    min-height: 92vh;
+  }
+
+  .hero__actions .btn,
+  .hero__actions .text-link,
+  .final-cta__actions .btn,
+  .final-cta__actions .text-link {
+    width: auto;
+  }
+
+  .pathway-feature {
+    min-height: 34rem;
+  }
+
+  .about__image {
+    width: min(100%, 25rem);
+    max-width: 25rem;
+  }
+
+  .about__image img {
+    max-height: 29rem;
+  }
+}
 
 @media (min-width: 720px) {
   .trust-strip__items {
@@ -998,6 +1143,12 @@ body.form-modal-open .privacy-banner {
 
   .resource-grid {
     grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .newsletter__shell {
+    grid-template-columns: 1fr 0.8fr;
   }
 }
 
@@ -1038,45 +1189,11 @@ body.form-modal-open .privacy-banner {
 
   .trust-item {
     padding: 0 1.4rem 0 0;
-    border-bottom: 0;
     border-right: 1px solid rgba(255, 255, 255, 0.13);
+    border-bottom: 0;
   }
 
   .trust-item:last-child {
     border-right: 0;
-  }
-}
-
-@media (max-width: 640px) {
-  .hero {
-    min-height: 88vh;
-    background-position: 66% center;
-  }
-
-  .hero__inner {
-    min-height: 88vh;
-  }
-
-  .hero__actions .btn,
-  .hero__actions .text-link,
-  .final-cta__actions .btn,
-  .final-cta__actions .text-link {
-    width: 100%;
-  }
-
-  .pathway-feature {
-    min-height: 28rem;
-  }
-}
-
-@media (max-width: 520px) {
-  .mortgage-form-modal {
-    align-items: start;
-    padding: calc(var(--header-total-height) + 0.85rem) 0.75rem 0.75rem;
-  }
-
-  .mortgage-form-modal__panel {
-    max-height: calc(100vh - var(--header-total-height) - 1.6rem);
-    border-radius: 1.25rem;
   }
 }

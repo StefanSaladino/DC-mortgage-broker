@@ -1,7 +1,9 @@
 /* =========================================================
    ONTARIO MORTGAGE CALCULATOR
-   Educational estimate only. Confirm exact qualification, tax,
-   insurance, and closing-cost treatment with a licensed professional.
+   - Calculates mortgage principal and interest
+   - Adds property tax, heating, and condo fees into the visible payment
+   - Estimates CMHC/default insurance, Ontario/Toronto land transfer tax,
+     first-time buyer rebates, stress-test payment, and GDS/TDS ratios
 ========================================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -12,205 +14,31 @@ function initMortgageCalculator() {
   const form = document.getElementById("mortgageCalculator");
   if (!form) return;
 
-  const inputs = form.querySelectorAll("input, select");
-  inputs.forEach((input) => input.addEventListener("input", updateCalculator));
-  inputs.forEach((input) => input.addEventListener("change", updateCalculator));
+  const fields = form.querySelectorAll("input, select");
 
-  updateCalculator();
+  fields.forEach((field) => {
+    field.addEventListener("input", calculateMortgage);
+    field.addEventListener("change", calculateMortgage);
+  });
+
+  calculateMortgage();
 }
 
-function updateCalculator() {
-  const homePrice = getNumber("homePrice");
-  const enteredDownPayment = getNumber("downPayment");
-  const rate = getNumber("interestRate") / 100;
-  const amortizationYears = getNumber("amortization");
-  const paymentsPerYear = getNumber("frequency");
-  const propertyTaxAnnual = getNumber("propertyTax");
-  const heatingMonthly = getNumber("heatingCost");
-  const condoMonthly = getNumber("condoFees");
-  const otherDebtMonthly = getNumber("monthlyDebt");
-  const grossIncomeAnnual = getNumber("grossIncome");
-  const firstTimeBuyer = getChecked("firstTimeBuyer");
-  const newBuild = getChecked("newBuild");
-  const inToronto = getChecked("inToronto");
-
-  const warnings = [];
-  const minDownPayment = calculateMinimumDownPayment(homePrice);
-  const downPayment = Math.max(enteredDownPayment, minDownPayment);
-  const downPaymentPercent = homePrice > 0 ? downPayment / homePrice : 0;
-
-  if (enteredDownPayment < minDownPayment) {
-    warnings.push(`Entered down payment is below the estimated minimum. Calculations use ${formatCurrency(minDownPayment)}.`);
-  }
-
-  if (homePrice >= 1500000 && downPaymentPercent < 0.2) {
-    warnings.push("Homes priced at $1.5M or more generally require at least 20% down and are not eligible for default-insured financing.");
-  }
-
-  if (downPaymentPercent < 0.2 && amortizationYears === 30 && !firstTimeBuyer && !newBuild) {
-    warnings.push("A 30-year insured amortization may only be available for eligible first-time buyers or new builds. Confirm eligibility before relying on this estimate.");
-  }
-
-  const baseMortgage = Math.max(homePrice - downPayment, 0);
-  const insurancePremium = calculateInsurancePremium(homePrice, baseMortgage, downPaymentPercent);
-  const insurancePst = insurancePremium * 0.08;
-  const totalMortgage = baseMortgage + insurancePremium;
-
-  const payment = calculateCanadianMortgagePayment(totalMortgage, rate, amortizationYears, paymentsPerYear);
-  const stressRate = Math.max(rate + 0.02, 0.0525);
-  const stressPayment = calculateCanadianMortgagePayment(totalMortgage, stressRate, amortizationYears, paymentsPerYear);
-  const stressMonthlyEquivalent = stressPayment * paymentsPerYear / 12;
-
-  const ontarioLttGross = calculateOntarioLandTransferTax(homePrice);
-  const torontoLttGross = inToronto ? calculateTorontoMunicipalLandTransferTax(homePrice) : 0;
-  const ontarioRebate = firstTimeBuyer ? Math.min(ontarioLttGross, 4000) : 0;
-  const torontoRebate = firstTimeBuyer && inToronto ? Math.min(torontoLttGross, 4475) : 0;
-  const totalRebates = ontarioRebate + torontoRebate;
-
-  const lttAfterRebate = Math.max(ontarioLttGross + torontoLttGross - totalRebates, 0);
-  const closingCostBuffer = 2500;
-  const cashNeeded = downPayment + lttAfterRebate + insurancePst + closingCostBuffer;
-
-  const monthlyIncome = grossIncomeAnnual / 12;
-  const housingCosts = stressMonthlyEquivalent + propertyTaxAnnual / 12 + heatingMonthly + condoMonthly * 0.5;
-  const gds = monthlyIncome > 0 ? housingCosts / monthlyIncome : 0;
-  const tds = monthlyIncome > 0 ? (housingCosts + otherDebtMonthly) / monthlyIncome : 0;
-
-  updateText("payment", formatCurrency(payment));
-  updateText("paymentLabel", `${getFrequencyLabel(paymentsPerYear)}, principal & interest`);
-  updateText("minDownPayment", formatCurrency(minDownPayment));
-  updateText("baseMortgage", formatCurrency(baseMortgage));
-  updateText("insurancePremium", formatCurrency(insurancePremium));
-  updateText("insurancePst", formatCurrency(insurancePst));
-  updateText("totalMortgage", formatCurrency(totalMortgage));
-  updateText("ontarioLtt", formatCurrency(Math.max(ontarioLttGross - ontarioRebate, 0)));
-  updateText("torontoLtt", inToronto ? formatCurrency(Math.max(torontoLttGross - torontoRebate, 0)) : "$0");
-  updateText("rebates", `-${formatCurrency(totalRebates)}`);
-  updateText("cashNeeded", formatCurrency(cashNeeded));
-  updateText("stressRate", `${(stressRate * 100).toFixed(2)}%`);
-  updateText("stressPayment", formatCurrency(stressPayment));
-  updateText("debtRatios", `${formatPercent(gds)} / ${formatPercent(tds)}`);
-
-  const percentOutput = document.getElementById("downPaymentPercent");
-  if (percentOutput) percentOutput.textContent = `${(downPaymentPercent * 100).toFixed(1)}%`;
-
-  const warningNode = document.querySelector('[data-result="warnings"]');
-  if (warningNode) {
-    warningNode.hidden = warnings.length === 0;
-    warningNode.innerHTML = warnings.map((warning) => `<p>${escapeHtml(warning)}</p>`).join("");
-  }
-}
-
+/** Safely reads a numeric input value by ID. */
 function getNumber(id) {
-  const node = document.getElementById(id);
-  if (!node) return 0;
-  const value = Number(node.value);
+  const input = document.getElementById(id);
+  const value = Number(input?.value || 0);
+
   return Number.isFinite(value) ? value : 0;
 }
 
+/** Safely reads a checked state by ID. */
 function getChecked(id) {
-  const node = document.getElementById(id);
-  return Boolean(node && node.checked);
+  const input = document.getElementById(id);
+  return Boolean(input?.checked);
 }
 
-function updateText(resultName, value) {
-  const node = document.querySelector(`[data-result="${resultName}"]`);
-  if (node) node.textContent = value;
-}
-
-function calculateMinimumDownPayment(price) {
-  if (price <= 0) return 0;
-  if (price <= 500000) return price * 0.05;
-  if (price < 1500000) return 25000 + (price - 500000) * 0.1;
-  return price * 0.2;
-}
-
-function calculateInsurancePremium(price, mortgageBeforeInsurance, downPaymentPercent) {
-  if (price <= 0 || mortgageBeforeInsurance <= 0) return 0;
-  if (downPaymentPercent >= 0.2) return 0;
-  if (price >= 1500000) return 0;
-
-  const loanToValue = mortgageBeforeInsurance / price;
-  let premiumRate = 0;
-
-  if (loanToValue <= 0.65) premiumRate = 0.006;
-  else if (loanToValue <= 0.75) premiumRate = 0.017;
-  else if (loanToValue <= 0.8) premiumRate = 0.024;
-  else if (loanToValue <= 0.85) premiumRate = 0.028;
-  else if (loanToValue <= 0.9) premiumRate = 0.031;
-  else if (loanToValue <= 0.95) premiumRate = 0.04;
-  else return 0;
-
-  return mortgageBeforeInsurance * premiumRate;
-}
-
-function calculateCanadianMortgagePayment(principal, annualRate, years, paymentsPerYear) {
-  if (principal <= 0 || years <= 0 || paymentsPerYear <= 0) return 0;
-  const totalPayments = years * paymentsPerYear;
-
-  if (annualRate <= 0) return principal / totalPayments;
-
-  const periodRate = Math.pow(1 + annualRate / 2, 2 / paymentsPerYear) - 1;
-  return principal * (periodRate / (1 - Math.pow(1 + periodRate, -totalPayments)));
-}
-
-function calculateOntarioLandTransferTax(price) {
-  const brackets = [
-    [55000, 0.005],
-    [250000, 0.01],
-    [400000, 0.015],
-    [2000000, 0.02],
-    [Infinity, 0.025],
-  ];
-
-  return calculateMarginalTax(price, brackets);
-}
-
-function calculateTorontoMunicipalLandTransferTax(price) {
-  const brackets = [
-    [55000, 0.005],
-    [250000, 0.01],
-    [400000, 0.015],
-    [2000000, 0.02],
-    [3000000, 0.025],
-    [4000000, 0.035],
-    [5000000, 0.045],
-    [10000000, 0.055],
-    [20000000, 0.065],
-    [Infinity, 0.075],
-  ];
-
-  return calculateMarginalTax(price, brackets);
-}
-
-function calculateMarginalTax(amount, brackets) {
-  let tax = 0;
-  let previousLimit = 0;
-
-  for (const [limit, rate] of brackets) {
-    if (amount <= previousLimit) break;
-
-    const taxableAmount = Math.min(amount, limit) - previousLimit;
-    tax += taxableAmount * rate;
-    previousLimit = limit;
-  }
-
-  return Math.max(tax, 0);
-}
-
-function getFrequencyLabel(paymentsPerYear) {
-  switch (paymentsPerYear) {
-    case 52:
-      return "per week";
-    case 26:
-      return "bi-weekly";
-    case 24:
-      return "semi-monthly";
-    default:
-      return "per month";
-  }
-}
-
+/** Formats a number as Canadian dollars. */
 function formatCurrency(value) {
   return new Intl.NumberFormat("en-CA", {
     style: "currency",
@@ -219,16 +47,254 @@ function formatCurrency(value) {
   }).format(Number.isFinite(value) ? value : 0);
 }
 
+/** Formats a number as a percentage. */
 function formatPercent(value) {
-  if (!Number.isFinite(value)) return "0%";
-  return `${(value * 100).toFixed(1)}%`;
+  return `${Number.isFinite(value) ? value.toFixed(1) : "0.0"}%`;
 }
 
-function escapeHtml(value) {
-  return String(value)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+/** Updates one calculator result field. */
+function setResult(name, value) {
+  const node = document.querySelector(`[data-result="${name}"]`);
+  if (node) node.textContent = value;
+}
+
+/**
+ * Calculates the minimum down payment using current Canadian purchase rules.
+ * - Up to $500,000: 5%
+ * - $500,000 to $1,500,000: 5% on first $500k + 10% on the remainder
+ * - $1,500,000+: 20%
+ */
+function calculateMinimumDownPayment(price) {
+  if (price <= 0) return 0;
+
+  if (price < 500000) {
+    return price * 0.05;
+  }
+
+  if (price < 1500000) {
+    return 25000 + (price - 500000) * 0.10;
+  }
+
+  return price * 0.20;
+}
+
+/**
+ * Estimates CMHC/default insurance premium.
+ * This is a planning estimate only.
+ */
+function calculateInsurancePremium(price, downPayment, amortizationYears) {
+  const baseMortgage = Math.max(price - downPayment, 0);
+  const downPaymentPercent = price > 0 ? downPayment / price : 0;
+  const loanToValue = price > 0 ? baseMortgage / price : 0;
+
+  if (price <= 0 || baseMortgage <= 0) return 0;
+
+  /* Homes at or above $1.5M generally require at least 20% down and are not insured in this simplified estimator. */
+  if (price >= 1500000) return 0;
+
+  /* No insurance estimate is needed when down payment is 20% or more. */
+  if (downPaymentPercent >= 0.20) return 0;
+
+  let premiumRate = 0;
+
+  if (loanToValue > 0.90 && loanToValue <= 0.95) {
+    premiumRate = 0.04;
+  } else if (loanToValue > 0.85 && loanToValue <= 0.90) {
+    premiumRate = 0.031;
+  } else if (loanToValue > 0.80 && loanToValue <= 0.85) {
+    premiumRate = 0.028;
+  }
+
+  /* Conservative note: this keeps the estimate simple for preview. */
+  if (amortizationYears > 25 && premiumRate > 0) {
+    premiumRate += 0.002;
+  }
+
+  return baseMortgage * premiumRate;
+}
+
+/** Calculates a standard monthly principal-and-interest mortgage payment. */
+function calculateMonthlyMortgagePayment(principal, annualRatePercent, amortizationYears) {
+  if (principal <= 0 || amortizationYears <= 0) return 0;
+
+  const monthlyRate = annualRatePercent / 100 / 12;
+  const numberOfPayments = amortizationYears * 12;
+
+  if (monthlyRate <= 0) {
+    return principal / numberOfPayments;
+  }
+
+  return principal * (monthlyRate / (1 - Math.pow(1 + monthlyRate, -numberOfPayments)));
+}
+
+/** Ontario-style land transfer tax estimate. */
+function calculateLandTransferTax(price) {
+  if (price <= 0) return 0;
+
+  let tax = 0;
+
+  const brackets = [
+    { limit: 55000, rate: 0.005 },
+    { limit: 250000, rate: 0.01 },
+    { limit: 400000, rate: 0.015 },
+    { limit: 2000000, rate: 0.02 },
+    { limit: Infinity, rate: 0.025 },
+  ];
+
+  let previousLimit = 0;
+
+  brackets.forEach((bracket) => {
+    if (price > previousLimit) {
+      const taxableAmount = Math.min(price, bracket.limit) - previousLimit;
+      tax += taxableAmount * bracket.rate;
+      previousLimit = bracket.limit;
+    }
+  });
+
+  return tax;
+}
+
+/** Converts a monthly carrying amount into the selected payment frequency. */
+function convertMonthlyToFrequency(monthlyAmount, frequency) {
+  const paymentsPerYear = Number(frequency) || 12;
+
+  return (monthlyAmount * 12) / paymentsPerYear;
+}
+
+/** Returns the plain-language label for the selected payment frequency. */
+function getFrequencyLabel(frequency) {
+  const labels = {
+    12: "per month",
+    24: "semi-monthly",
+    26: "bi-weekly",
+    52: "weekly",
+  };
+
+  return labels[frequency] || "per payment";
+}
+
+function calculateMortgage() {
+  const homePrice = getNumber("homePrice");
+  const enteredDownPayment = getNumber("downPayment");
+  const interestRate = getNumber("interestRate");
+  const amortization = getNumber("amortization");
+  const frequency = getNumber("frequency");
+  const annualPropertyTax = getNumber("propertyTax");
+  const monthlyHeating = getNumber("heatingCost");
+  const monthlyCondoFees = getNumber("condoFees");
+  const monthlyDebt = getNumber("monthlyDebt");
+  const grossAnnualIncome = getNumber("grossIncome");
+
+  const isFirstTimeBuyer = getChecked("firstTimeBuyer");
+  const isInToronto = getChecked("inToronto");
+
+  const minimumDownPayment = calculateMinimumDownPayment(homePrice);
+  const effectiveDownPayment = Math.max(enteredDownPayment, minimumDownPayment);
+  const downPaymentPercent = homePrice > 0 ? (enteredDownPayment / homePrice) * 100 : 0;
+
+  const downPaymentOutput = document.getElementById("downPaymentPercent");
+  if (downPaymentOutput) {
+    downPaymentOutput.textContent = formatPercent(downPaymentPercent);
+  }
+
+  const insurancePremium = calculateInsurancePremium(homePrice, effectiveDownPayment, amortization);
+  const baseMortgage = Math.max(homePrice - effectiveDownPayment, 0);
+  const totalMortgage = baseMortgage + insurancePremium;
+  const insurancePst = insurancePremium * 0.08;
+
+  const monthlyPrincipalInterest = calculateMonthlyMortgagePayment(totalMortgage, interestRate, amortization);
+  const monthlyPropertyTax = annualPropertyTax / 12;
+
+  /*
+    Final visible payment:
+    Principal + interest + property tax + heat + condo fees.
+    This directly addresses the client note that tax and heat must be added
+    to the main payment estimate.
+  */
+  const totalMonthlyCarryingCost =
+    monthlyPrincipalInterest +
+    monthlyPropertyTax +
+    monthlyHeating +
+    monthlyCondoFees;
+
+  const selectedFrequencyPayment = convertMonthlyToFrequency(totalMonthlyCarryingCost, frequency);
+  const selectedFrequencyLabel = getFrequencyLabel(frequency);
+
+  const ontarioLtt = calculateLandTransferTax(homePrice);
+  const torontoLtt = isInToronto ? calculateLandTransferTax(homePrice) : 0;
+
+  const ontarioRebate = isFirstTimeBuyer ? Math.min(4000, ontarioLtt) : 0;
+  const torontoRebate = isFirstTimeBuyer && isInToronto ? Math.min(4475, torontoLtt) : 0;
+  const totalRebates = ontarioRebate + torontoRebate;
+
+  const netLandTransferTax = Math.max(ontarioLtt + torontoLtt - totalRebates, 0);
+  const closingCostBuffer = 2500;
+  const estimatedCashNeeded = effectiveDownPayment + netLandTransferTax + insurancePst + closingCostBuffer;
+
+  const stressRate = Math.max(interestRate + 2, 5.25);
+  const stressPayment = calculateMonthlyMortgagePayment(totalMortgage, stressRate, amortization);
+
+  /*
+    Qualification ratios:
+    - GDS includes stressed mortgage payment, property tax, heat, and 50% condo fees.
+    - TDS includes GDS items plus other monthly debt.
+  */
+  const grossMonthlyIncome = grossAnnualIncome / 12;
+  const gdsMonthlyCosts = stressPayment + monthlyPropertyTax + monthlyHeating + monthlyCondoFees * 0.5;
+  const tdsMonthlyCosts = gdsMonthlyCosts + monthlyDebt;
+
+  const gdsRatio = grossMonthlyIncome > 0 ? (gdsMonthlyCosts / grossMonthlyIncome) * 100 : 0;
+  const tdsRatio = grossMonthlyIncome > 0 ? (tdsMonthlyCosts / grossMonthlyIncome) * 100 : 0;
+
+  setResult("payment", formatCurrency(selectedFrequencyPayment));
+  setResult(
+    "paymentLabel",
+    `${selectedFrequencyLabel}, incl. mortgage, property tax, heating, and condo fees`
+  );
+
+  setResult("principalInterest", formatCurrency(monthlyPrincipalInterest));
+  setResult("propertyTaxMonthly", formatCurrency(monthlyPropertyTax));
+  setResult("heatingMonthly", formatCurrency(monthlyHeating));
+  setResult("condoFeesMonthly", formatCurrency(monthlyCondoFees));
+
+  setResult("minDownPayment", formatCurrency(minimumDownPayment));
+  setResult("baseMortgage", formatCurrency(baseMortgage));
+  setResult("insurancePremium", formatCurrency(insurancePremium));
+  setResult("insurancePst", formatCurrency(insurancePst));
+  setResult("totalMortgage", formatCurrency(totalMortgage));
+  setResult("ontarioLtt", formatCurrency(ontarioLtt));
+  setResult("torontoLtt", formatCurrency(torontoLtt));
+  setResult("rebates", `-${formatCurrency(totalRebates)}`);
+  setResult("cashNeeded", formatCurrency(estimatedCashNeeded));
+  setResult("stressRate", `${stressRate.toFixed(2)}%`);
+  setResult("stressPayment", formatCurrency(stressPayment));
+  setResult("debtRatios", `${formatPercent(gdsRatio)} / ${formatPercent(tdsRatio)}`);
+
+  const warnings = [];
+
+  if (enteredDownPayment < minimumDownPayment) {
+    warnings.push(
+      `The entered down payment is below the estimated minimum. This preview uses ${formatCurrency(minimumDownPayment)} for the calculation.`
+    );
+  }
+
+  if (homePrice >= 1500000 && enteredDownPayment < homePrice * 0.20) {
+    warnings.push("Homes at or above $1.5M generally require at least 20% down.");
+  }
+
+  if (amortization > 25 && insurancePremium > 0) {
+    warnings.push("Insured 30-year amortization may depend on borrower and property eligibility.");
+  }
+
+  const warningBox = document.querySelector('[data-result="warnings"]');
+
+  if (warningBox) {
+    if (warnings.length) {
+      warningBox.hidden = false;
+      warningBox.innerHTML = warnings.map((warning) => `<p>${warning}</p>`).join("");
+    } else {
+      warningBox.hidden = true;
+      warningBox.innerHTML = "";
+    }
+  }
 }
