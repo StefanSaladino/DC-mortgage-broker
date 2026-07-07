@@ -1,0 +1,1076 @@
+/* =========================================================
+   HOME PAGE - DAVID COLAVITA MORTGAGE SITE
+   Purpose: premium mortgage landing page with less box-heavy layout.
+========================================================= */
+
+.hero {
+  position: relative;
+  min-height: 92vh;
+  display: grid;
+  align-items: center;
+  overflow: hidden;
+  background:
+    linear-gradient(90deg, rgba(5, 5, 8, 0.98) 0%, rgba(5, 5, 8, 0.9) 30%, rgba(5, 5, 8, 0.4) 64%, rgba(5, 5, 8, 0.1) 100%),
+    url("/assets/images/hero-david-colavita-banner.v1.webp") center / cover no-repeat;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 35%;
+  background: linear-gradient(180deg, transparent, var(--bg));
+  pointer-events: none;
+}
+
+.hero__shade {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 22% 46%, rgba(159, 52, 255, 0.18), transparent 23%),
+    radial-gradient(circle at 70% 24%, rgba(111, 53, 255, 0.14), transparent 25%);
+  pointer-events: none;
+}
+
+.hero__inner {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  align-items: center;
+  min-height: 92vh;
+  padding: calc(var(--header-total-height) + 3rem) 0 4rem;
+}
+
+.hero__copy {
+  max-width: 43rem;
+}
+
+.hero h1 {
+  margin-bottom: 1.4rem;
+  font-size: clamp(3rem, 7vw, 6.7rem);
+}
+
+.hero h1 span {
+  color: #c478ff;
+}
+
+.hero__lead {
+  max-width: 36rem;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: clamp(1rem, 1.8vw, 1.22rem);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.85rem;
+  margin-top: 2rem;
+}
+
+/* =========================================================
+   TRUST STRIP
+========================================================= */
+
+.trust-strip {
+  position: relative;
+  padding: 2rem 0;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 15% 50%, rgba(159, 52, 255, 0.2), transparent 25%),
+    linear-gradient(180deg, #050508, #080710);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.trust-strip::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 0%, rgba(159, 52, 255, 0.18) 48%, transparent 70%);
+  transform: translateX(-100%);
+  animation: trustSweep 7s ease-in-out infinite;
+  opacity: 0.7;
+}
+
+.trust-strip__inner {
+  position: relative;
+  z-index: 1;
+}
+
+.trust-strip__intro {
+  margin-bottom: 1.35rem;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.78rem;
+  font-weight: 850;
+  letter-spacing: 0.14em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.trust-strip__items {
+  display: grid;
+  gap: 1.2rem;
+}
+
+.trust-item {
+  position: relative;
+  padding: 0 0 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.11);
+}
+
+.trust-item__kicker,
+.trust-item span:last-child {
+  display: block;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.trust-item__kicker {
+  color: #c68cff;
+  font-weight: 850;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.trust-item strong {
+  display: block;
+  margin: 0.2rem 0;
+  color: var(--white);
+  font-size: clamp(1.2rem, 2.1vw, 1.65rem);
+  line-height: 1.1;
+}
+
+/* =========================================================
+   PATHWAYS
+========================================================= */
+
+.pathways {
+  background: #f7f4fb;
+  color: var(--text-dark);
+}
+
+.pathways__grid {
+  display: grid;
+  gap: 2rem;
+}
+
+.pathway-feature {
+  position: relative;
+  min-height: 34rem;
+  display: grid;
+  align-items: end;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  box-shadow: 0 1.8rem 4rem rgba(31, 20, 48, 0.14);
+}
+
+.pathway-feature__image {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(5, 5, 8, 0.1), rgba(5, 5, 8, 0.92)),
+    url("/assets/images/hero-david-colavita-banner.v1.webp") center / cover no-repeat;
+  transform: scale(1.01);
+  transition: transform 0.6s ease, filter 0.6s ease;
+}
+
+.pathway-feature:hover .pathway-feature__image {
+  transform: scale(1.05);
+  filter: saturate(1.08);
+}
+
+.pathway-feature__content {
+  position: relative;
+  z-index: 1;
+  padding: clamp(1.4rem, 3vw, 2rem);
+  color: var(--white);
+}
+
+.pathway-feature__label {
+  display: inline-flex;
+  margin-bottom: 0.8rem;
+  color: #d6a5ff;
+  font-size: 0.72rem;
+  font-weight: 850;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.pathway-feature h3 {
+  margin-bottom: 0.6rem;
+  font-size: clamp(1.9rem, 3vw, 2.8rem);
+}
+
+.pathway-feature p {
+  max-width: 30rem;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.pathway-list {
+  display: grid;
+  gap: 0.55rem;
+  align-content: start;
+}
+
+.pathway-row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1rem;
+  width: 100%;
+  padding: 1.1rem;
+  border: 1px solid transparent;
+  border-radius: 1rem;
+  background: transparent;
+  color: var(--text-dark);
+  text-align: left;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.pathway-row__icon {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 999px;
+  background: rgba(159, 52, 255, 0.1);
+  color: var(--accent-2);
+  font-size: 0.78rem;
+  font-weight: 900;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.pathway-row strong,
+.pathway-row small {
+  display: block;
+}
+
+.pathway-row strong {
+  margin-bottom: 0.2rem;
+  font-size: 1.05rem;
+}
+
+.pathway-row small {
+  color: var(--muted-dark);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.pathway-row::after {
+  content: none;
+}
+
+.pathway-row:hover,
+.pathway-row:focus-visible {
+  transform: translateY(-1px);
+  background: rgba(159, 52, 255, 0.07);
+  border-color: rgba(159, 52, 255, 0.18);
+}
+
+.pathway-row:hover .pathway-row__icon,
+.pathway-row:focus-visible .pathway-row__icon,
+.pathway-row.is-active .pathway-row__icon {
+  transform: scale(1.05);
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: var(--white);
+}
+
+.pathway-row.is-active {
+  background:
+    linear-gradient(135deg, rgba(159, 52, 255, 0.14), rgba(111, 53, 255, 0.07)),
+    rgba(255, 255, 255, 0.72);
+  border-color: rgba(159, 52, 255, 0.28);
+  box-shadow: 0 1rem 2.2rem rgba(31, 20, 48, 0.08);
+}
+
+/* =========================================================
+   CALCULATOR
+========================================================= */
+
+.calculator {
+  background: linear-gradient(180deg, #f7f4fb, #ffffff);
+  color: var(--text-dark);
+}
+
+.calculator__shell {
+  display: grid;
+  gap: 1.5rem;
+  padding: clamp(1rem, 3vw, 1.5rem);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(circle at 85% 12%, rgba(159, 52, 255, 0.26), transparent 28%),
+    linear-gradient(135deg, #0a0911, #161321 55%, #08070d);
+  color: var(--white);
+  box-shadow: 0 2rem 4.5rem rgba(31, 20, 48, 0.18);
+}
+
+.calculator__intro {
+  padding: clamp(1rem, 2vw, 1.5rem);
+}
+
+.calculator__intro h2 {
+  font-size: clamp(2.2rem, 4vw, 3.8rem);
+}
+
+.calculator__intro p:not(.eyebrow) {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.calculator-form,
+.calculator-results {
+  padding: clamp(1rem, 2vw, 1.4rem);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.calculator-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.field-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.field-group {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.field-group label {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.72rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.input-wrap,
+select {
+  width: 100%;
+  min-height: 3.35rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 0.95rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 0.85rem;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.025)),
+    rgba(5, 5, 8, 0.46);
+  color: var(--white);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 0.75rem 1.8rem rgba(0, 0, 0, 0.12);
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.input-wrap:hover,
+select:hover {
+  border-color: rgba(255, 255, 255, 0.24);
+}
+
+.input-wrap:focus-within,
+select:focus {
+  border-color: rgba(198, 140, 255, 0.72);
+  background:
+    linear-gradient(135deg, rgba(159, 52, 255, 0.16), rgba(255, 255, 255, 0.045)),
+    rgba(5, 5, 8, 0.58);
+  box-shadow:
+    0 0 0 4px rgba(159, 52, 255, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 1rem 2.2rem rgba(0, 0, 0, 0.18);
+}
+
+.input-wrap input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: var(--white);
+  outline: 0;
+}
+
+.input-wrap span,
+.input-wrap output {
+  color: rgba(216, 180, 255, 0.82);
+  font-weight: 800;
+}
+
+.input-wrap input[type="number"]::-webkit-outer-spin-button,
+.input-wrap input[type="number"]::-webkit-inner-spin-button {
+  margin: 0;
+  appearance: none;
+}
+
+.input-wrap input[type="number"] {
+  appearance: textfield;
+}
+
+select {
+  appearance: none;
+  cursor: pointer;
+  padding-right: 3rem;
+  outline: 0;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.025)),
+    linear-gradient(45deg, transparent 50%, #d8b4ff 50%) right 1.25rem center / 0.45rem 0.45rem no-repeat,
+    linear-gradient(135deg, #d8b4ff 50%, transparent 50%) right 0.95rem center / 0.45rem 0.45rem no-repeat,
+    rgba(5, 5, 8, 0.46);
+}
+
+select option {
+  background: #11101a;
+  color: var(--white);
+}
+
+.input-wrap--suffix {
+  padding-right: 0.95rem;
+}
+
+.input-wrap--suffix input {
+  text-align: left;
+}
+
+.input-wrap--split output {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 3.4rem;
+  padding: 0.25rem 0.45rem;
+  border-radius: 999px;
+  background: rgba(159, 52, 255, 0.16);
+  color: #e8d2ff;
+  font-size: 0.78rem;
+  line-height: 1;
+}
+
+.toggle-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.4rem;
+}
+
+.check-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(255, 255, 255, 0.76);
+  font-size: 0.9rem;
+}
+
+.check-option input {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--accent);
+}
+
+.calculator-results {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+}
+
+.result-card--hero {
+  padding: 1.4rem;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  box-shadow: 0 1.4rem 3.2rem rgba(159, 52, 255, 0.28);
+}
+
+.result-card--hero span,
+.result-card--hero small {
+  display: block;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.result-card--hero strong {
+  display: block;
+  margin: 0.25rem 0;
+  font-size: clamp(2.3rem, 5vw, 4rem);
+  line-height: 1;
+}
+
+.result-list {
+  display: grid;
+  gap: 0;
+  margin: 0;
+}
+
+.result-list div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.72rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.result-list dt {
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.result-list dd {
+  margin: 0;
+  color: var(--white);
+  font-weight: 800;
+  text-align: right;
+}
+
+.result-list .positive {
+  color: #8ff0b4;
+}
+
+.calculator-warning {
+  padding: 0.9rem 1rem;
+  border: 1px solid rgba(255, 194, 102, 0.35);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 194, 102, 0.08);
+  color: #ffd89b;
+  font-size: 0.9rem;
+}
+
+.fine-print--results {
+  margin-bottom: 0;
+}
+
+/* =========================================================
+   ABOUT
+========================================================= */
+
+.about__grid {
+  display: grid;
+  gap: 2rem;
+  align-items: center;
+}
+
+.about__image {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, rgba(159, 52, 255, 0.22), transparent);
+  box-shadow: var(--shadow);
+}
+
+.about__image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 65%, rgba(5, 5, 8, 0.58));
+  pointer-events: none;
+}
+
+.about__image img {
+  width: 100%;
+  max-height: 42rem;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.about__content p:not(.eyebrow),
+.about__content li {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.check-list {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0;
+  margin: 1.5rem 0;
+  list-style: none;
+}
+
+.check-list li {
+  position: relative;
+  padding-left: 1.6rem;
+}
+
+.check-list li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #c68cff;
+  font-weight: 900;
+}
+
+.credential-card {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.credential-card img {
+  width: min(24rem, 100%);
+  padding: 0.65rem 0.75rem;
+  border-radius: 0.45rem;
+  background:
+    linear-gradient(135deg, rgba(238, 232, 248, 0.72), rgba(204, 190, 226, 0.52));
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow:
+    0 0.8rem 1.8rem rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.credential-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* =========================================================
+   REALTORS / RESOURCES
+========================================================= */
+
+.realtors,
+.resources {
+  background: #f7f4fb;
+  color: var(--text-dark);
+}
+
+.realtors__grid {
+  display: grid;
+  gap: 2rem;
+}
+
+.realtor-steps,
+.resource-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.step,
+.resource-card {
+  padding: 1.25rem;
+  border-top: 1px solid var(--line-dark);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0));
+}
+
+.step span,
+.resource-card span {
+  display: inline-flex;
+  margin-bottom: 0.8rem;
+  color: var(--accent-2);
+  font-size: 0.76rem;
+  font-weight: 900;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.step h3,
+.resource-card h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.step p,
+.resource-card p {
+  color: var(--muted-dark);
+}
+
+.resources__top {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+/* =========================================================
+   FINAL CTA
+========================================================= */
+
+.final-cta {
+  padding: clamp(3rem, 6vw, 4.8rem) 0;
+  background:
+    radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.2), transparent 18%),
+    linear-gradient(135deg, var(--accent), #35145f);
+}
+
+.final-cta__inner {
+  display: grid;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.final-cta h2 {
+  max-width: 42rem;
+  font-size: clamp(2rem, 4vw, 3.7rem);
+}
+
+.final-cta p:not(.eyebrow) {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.final-cta__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+}
+
+/* =========================================================
+   MORTGAGE INQUIRY NETLIFY FORM MODAL
+========================================================= */
+
+body.form-modal-open {
+  overflow: hidden;
+}
+
+/* Allows a button to visually behave like the existing text-link style. */
+.text-link--button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.mortgage-form-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: grid;
+  align-items: start;
+  justify-items: center;
+  padding: calc(var(--header-total-height) + 1.35rem) 1rem 1.5rem;
+  overflow-y: auto;
+}
+
+.mortgage-form-modal[hidden] {
+  display: none;
+}
+
+.mortgage-form-modal__backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 5, 8, 0.78);
+}
+
+.mortgage-form-modal__panel {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 46rem);
+  max-height: calc(100vh - var(--header-total-height) - 2.85rem);
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  padding: clamp(1.2rem, 4vw, 2rem);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(circle at 85% 10%, rgba(159, 52, 255, 0.24), transparent 28%),
+    linear-gradient(135deg, #0a0911, #161321 55%, #08070d);
+  color: var(--white);
+  box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.45);
+}
+
+/* Sleeker modal scrollbar for Firefox. */
+.mortgage-form-modal,
+.mortgage-form-modal__panel {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(198, 140, 255, 0.52) rgba(255, 255, 255, 0.06);
+}
+
+/* Sleeker modal scrollbar for Chrome, Edge, and Safari. */
+.mortgage-form-modal::-webkit-scrollbar,
+.mortgage-form-modal__panel::-webkit-scrollbar {
+  width: 0.55rem;
+}
+
+.mortgage-form-modal::-webkit-scrollbar-track,
+.mortgage-form-modal__panel::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 999px;
+}
+
+.mortgage-form-modal::-webkit-scrollbar-thumb,
+.mortgage-form-modal__panel::-webkit-scrollbar-thumb {
+  border: 2px solid rgba(8, 7, 14, 0.96);
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(216, 180, 255, 0.75), rgba(159, 52, 255, 0.65));
+}
+
+.mortgage-form-modal::-webkit-scrollbar-thumb:hover,
+.mortgage-form-modal__panel::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgba(232, 210, 255, 0.9), rgba(159, 52, 255, 0.8));
+}
+
+.mortgage-form-modal__close {
+  position: absolute;
+  top: 0.9rem;
+  right: 0.9rem;
+  width: 2.4rem;
+  height: 2.4rem;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--white);
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.mortgage-form-modal__intro {
+  max-width: 36rem;
+  margin-bottom: 1.25rem;
+  padding-right: 2.7rem;
+}
+
+.mortgage-form-modal__intro h2 {
+  margin-bottom: 0.7rem;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+}
+
+.mortgage-form-modal__intro p:not(.eyebrow) {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.mortgage-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.mortgage-form__grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.form-field {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.form-field label {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.72rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+  width: 100%;
+  min-height: 3.2rem;
+  padding: 0.85rem 0.95rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 0.85rem;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.025)),
+    rgba(5, 5, 8, 0.46);
+  color: var(--white);
+  outline: 0;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.form-field textarea {
+  resize: vertical;
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  border-color: rgba(198, 140, 255, 0.72);
+  background:
+    linear-gradient(135deg, rgba(159, 52, 255, 0.16), rgba(255, 255, 255, 0.045)),
+    rgba(5, 5, 8, 0.58);
+  box-shadow:
+    0 0 0 4px rgba(159, 52, 255, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.form-field select {
+  appearance: none;
+  cursor: pointer;
+  padding-right: 3rem;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.025)),
+    linear-gradient(45deg, transparent 50%, #d8b4ff 50%) right 1.25rem center / 0.45rem 0.45rem no-repeat,
+    linear-gradient(135deg, #d8b4ff 50%, transparent 50%) right 0.95rem center / 0.45rem 0.45rem no-repeat,
+    rgba(5, 5, 8, 0.46);
+}
+
+.form-field select option {
+  background: #11101a;
+  color: var(--white);
+}
+
+.form-consent {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.65rem;
+  align-items: start;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.86rem;
+}
+
+.form-consent input {
+  margin-top: 0.25rem;
+  accent-color: var(--accent);
+}
+
+.form-note {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.82rem;
+}
+
+.form-note a {
+  color: #d8b4ff;
+  font-weight: 800;
+}
+
+.form-hidden {
+  position: absolute;
+  left: -9999px;
+  opacity: 0;
+}
+
+body.form-modal-open .privacy-banner {
+  display: none !important;
+}
+
+@media (min-width: 720px) {
+  .mortgage-form__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .mortgage-form-modal {
+    align-items: start;
+    padding: calc(var(--header-total-height) + 0.85rem) 0.75rem 0.75rem;
+  }
+
+  .mortgage-form-modal__panel {
+    max-height: calc(100vh - var(--header-total-height) - 1.6rem);
+    border-radius: 1.25rem;
+  }
+}
+
+/* =========================================================
+   KEYFRAMES
+========================================================= */
+
+@keyframes trustSweep {
+  0%, 35% {
+    transform: translateX(-100%);
+  }
+
+  65%, 100% {
+    transform: translateX(100%);
+  }
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (min-width: 720px) {
+  .trust-strip__items {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .field-grid--two,
+  .mortgage-form__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .resource-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 980px) {
+  .pathways__grid {
+    grid-template-columns: 0.85fr 1.2fr 1fr;
+    align-items: center;
+  }
+
+  .calculator__shell {
+    grid-template-columns: 0.75fr 1fr 1fr;
+    align-items: start;
+  }
+
+  .about__grid {
+    grid-template-columns: 0.8fr 1fr;
+  }
+
+  .realtors__grid {
+    grid-template-columns: 0.8fr 1.4fr;
+    align-items: center;
+  }
+
+  .realtor-steps {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .resources__top,
+  .final-cta__inner {
+    grid-template-columns: 1fr auto;
+  }
+}
+
+@media (min-width: 1040px) {
+  .trust-strip__items {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .trust-item {
+    padding: 0 1.4rem 0 0;
+    border-bottom: 0;
+    border-right: 1px solid rgba(255, 255, 255, 0.13);
+  }
+
+  .trust-item:last-child {
+    border-right: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero {
+    min-height: 88vh;
+    background-position: 66% center;
+  }
+
+  .hero__inner {
+    min-height: 88vh;
+  }
+
+  .hero__actions .btn,
+  .hero__actions .text-link,
+  .final-cta__actions .btn,
+  .final-cta__actions .text-link {
+    width: 100%;
+  }
+
+  .pathway-feature {
+    min-height: 28rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .mortgage-form-modal {
+    align-items: end;
+    padding: calc(var(--header-total-height) + 0.5rem) 0.75rem 0.75rem;
+  }
+
+  .mortgage-form-modal__panel {
+    max-height: calc(100vh - var(--header-total-height) - 1rem);
+    border-radius: 1.25rem;
+  }
+}
