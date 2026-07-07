@@ -8,8 +8,8 @@
 
 document.addEventListener("DOMContentLoaded", async () => {
   await Promise.all([
-    loadComponent("siteHeaderMount", "/header.html"),
-    loadComponent("siteFooterMount", "/footer.html"),
+    loadComponent("siteHeaderMount", "header.html"),
+    loadComponent("siteFooterMount", "footer.html"),
   ]);
 
   setCurrentYear();
@@ -23,7 +23,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 /**
  * Loads a reusable HTML partial into a mount element.
- * This works on Netlify or a local dev server. It will not work from a direct file:// open.
+ * Relative paths are used so the site works on GitHub Pages project URLs.
+ * This works on GitHub Pages, Netlify, or a local dev server.
+ * It will not work from a direct file:// open.
  */
 async function loadComponent(mountId, filePath) {
   const mount = document.getElementById(mountId);
@@ -144,7 +146,7 @@ function initPathwaySwitcher() {
  *
  * Important:
  * - The form itself is static HTML in index.html so Netlify can detect it at deploy time.
- * - Header links can safely point to /#mortgageInquiry from other pages.
+ * - Header links point to index.html#mortgageInquiry so they work on GitHub Pages.
  * - On the home page, those links open the modal instead of navigating.
  */
 function initMortgageInquiryForm() {
@@ -275,7 +277,7 @@ function initPrivacyBanner() {
       <div class="privacy-banner__actions">
         <button class="btn btn--primary" type="button" data-privacy-accept>Accept optional</button>
         <button class="btn btn--ghost" type="button" data-privacy-decline>Decline optional</button>
-        <a class="text-link" href="/privacy.html">Privacy Policy</a>
+        <a class="text-link" href="privacy.html">Privacy Policy</a>
       </div>
     </div>
   `;

@@ -11,7 +11,7 @@
   overflow: hidden;
   background:
     linear-gradient(90deg, rgba(5, 5, 8, 0.98) 0%, rgba(5, 5, 8, 0.9) 30%, rgba(5, 5, 8, 0.4) 64%, rgba(5, 5, 8, 0.1) 100%),
-    url("/assets/images/hero-david-colavita-banner.v1.webp") center / cover no-repeat;
+    url("../images/hero-david-colavita-banner.v1.webp") center / cover no-repeat;
 }
 
 .hero::after {
@@ -170,7 +170,7 @@
   inset: 0;
   background:
     linear-gradient(180deg, rgba(5, 5, 8, 0.1), rgba(5, 5, 8, 0.92)),
-    url("/assets/images/hero-david-colavita-banner.v1.webp") center / cover no-repeat;
+    url("../images/hero-david-colavita-banner.v1.webp") center / cover no-repeat;
   transform: scale(1.01);
   transition: transform 0.6s ease, filter 0.6s ease;
 }
@@ -727,7 +727,6 @@ body.form-modal-open {
   overflow: hidden;
 }
 
-/* Allows a button to visually behave like the existing text-link style. */
 .text-link--button {
   padding: 0;
   border: 0;
@@ -944,24 +943,6 @@ body.form-modal-open .privacy-banner {
   display: none !important;
 }
 
-@media (min-width: 720px) {
-  .mortgage-form__grid {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-@media (max-width: 520px) {
-  .mortgage-form-modal {
-    align-items: start;
-    padding: calc(var(--header-total-height) + 0.85rem) 0.75rem 0.75rem;
-  }
-
-  .mortgage-form-modal__panel {
-    max-height: calc(100vh - var(--header-total-height) - 1.6rem);
-    border-radius: 1.25rem;
-  }
-}
-
 /* =========================================================
    KEYFRAMES
 ========================================================= */
@@ -1065,12 +1046,12 @@ body.form-modal-open .privacy-banner {
 
 @media (max-width: 520px) {
   .mortgage-form-modal {
-    align-items: end;
-    padding: calc(var(--header-total-height) + 0.5rem) 0.75rem 0.75rem;
+    align-items: start;
+    padding: calc(var(--header-total-height) + 0.85rem) 0.75rem 0.75rem;
   }
 
   .mortgage-form-modal__panel {
-    max-height: calc(100vh - var(--header-total-height) - 1rem);
+    max-height: calc(100vh - var(--header-total-height) - 1.6rem);
     border-radius: 1.25rem;
   }
 }
