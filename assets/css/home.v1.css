@@ -652,11 +652,34 @@ select option {
   gap: 1rem;
 }
 
+/* Simple card treatment.
+   Keeps the original layout, but adds a clean border, radius, and light shading. */
 .step,
 .resource-card {
   padding: 1.25rem;
-  border-top: 1px solid var(--line-dark);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0));
+  border: 1px solid rgba(31, 20, 48, 0.12);
+  border-radius: 1rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.72)),
+    rgba(255, 255, 255, 0.82);
+  box-shadow: 0 0.85rem 1.8rem rgba(31, 20, 48, 0.06);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.step:hover,
+.step:focus-within,
+.resource-card:hover,
+.resource-card:focus-within {
+  transform: translateY(-2px);
+  border-color: rgba(159, 52, 255, 0.22);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.82)),
+    rgba(255, 255, 255, 0.9);
+  box-shadow: 0 1rem 2.2rem rgba(31, 20, 48, 0.09);
 }
 
 .step span,
@@ -673,11 +696,13 @@ select option {
 .step h3,
 .resource-card h3 {
   margin-bottom: 0.5rem;
+  color: var(--text-dark);
   font-size: 1.2rem;
 }
 
 .step p,
 .resource-card p {
+  margin-bottom: 0;
   color: var(--muted-dark);
 }
 
