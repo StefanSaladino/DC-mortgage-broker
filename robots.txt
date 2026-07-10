@@ -1,5 +1,5 @@
 # =========================================================
-# robots.txt - davidcolavita.ca
+# robots.txt - davidcolavita.com
 # Purpose:
 # Allow major search engines, AI search crawlers, and reputable
 # discovery bots to crawl the public website.
@@ -59,4 +59,4 @@ Allow: /
 User-agent: Applebot-Extended
 Allow: /
 
-Sitemap: https://davidcolavita.ca/sitemap.xml
+Sitemap: https://davidcolavita.com/sitemap.xml

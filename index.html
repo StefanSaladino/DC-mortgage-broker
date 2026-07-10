@@ -11,11 +11,7 @@
       name="description"
       content="David Colavita is a Mortgage Agent Level 2 helping Ontario buyers, homeowners, investors, and self-employed borrowers compare mortgage options with clarity." />
     <meta name="robots" content="index,follow" />
-
-    <!-- Temporary GitHub Pages canonical. Change to https://davidcolavita.ca/ when hosted on Netlify/custom domain. -->
-    <link
-      rel="canonical"
-      href="https://stefansaladino.github.io/DC-mortgage-broker/" />
+    <link rel="canonical" href="https://davidcolavita.com/" />
 
     <!-- Open Graph / Facebook / LinkedIn -->
     <meta property="og:type" content="website" />
@@ -28,15 +24,13 @@
     <meta
       property="og:description"
       content="Clear Ontario mortgage guidance for buying, renewing, refinancing, investing, and self-employed borrowing." />
-    <meta
-      property="og:url"
-      content="https://stefansaladino.github.io/DC-mortgage-broker/" />
+    <meta property="og:url" content="https://davidcolavita.com/" />
     <meta
       property="og:image"
-      content="https://stefansaladino.github.io/DC-mortgage-broker/assets/images/og-david-colavita.v1.png" />
+      content="https://davidcolavita.com/assets/images/og-david-colavita.v1.png" />
     <meta
       property="og:image:secure_url"
-      content="https://stefansaladino.github.io/DC-mortgage-broker/assets/images/og-david-colavita.v1.png" />
+      content="https://davidcolavita.com/assets/images/og-david-colavita.v1.png" />
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -55,11 +49,12 @@
       content="Clear Ontario mortgage guidance for buyers, homeowners, investors, and self-employed borrowers." />
     <meta
       name="twitter:image"
-      content="https://stefansaladino.github.io/DC-mortgage-broker/assets/images/og-david-colavita.v1.png" />
+      content="https://davidcolavita.com/assets/images/og-david-colavita.v1.png" />
     <meta
       name="twitter:image:alt"
       content="David Colavita Mortgage Agent Level 2 offering Ontario mortgage guidance." />
 
+    <!-- Local SEO -->
     <meta name="geo.region" content="CA-ON" />
     <meta name="geo.placename" content="Ontario" />
     <meta name="language" content="English" />
@@ -79,15 +74,18 @@
     <link rel="apple-touch-icon" href="assets/images/favicon.png" />
     <meta name="theme-color" content="#050508" />
 
+    <!-- Performance -->
     <link
       rel="preload"
       as="image"
       href="assets/images/hero-david-colavita-banner.v1.webp"
       fetchpriority="high" />
 
+    <!-- Styles -->
     <link rel="stylesheet" href="assets/css/global.v1.css" />
     <link rel="stylesheet" href="assets/css/home.v1.css" />
 
+    <!-- Structured Data -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -100,8 +98,8 @@
         },
         "telephone": "+1-647-444-1347",
         "email": "mortgages@davidcolavita.com",
-        "url": "https://stefansaladino.github.io/DC-mortgage-broker/",
-        "image": "https://stefansaladino.github.io/DC-mortgage-broker/assets/images/og-david-colavita.v1.png",
+        "url": "https://davidcolavita.com/",
+        "image": "https://davidcolavita.com/assets/images/og-david-colavita.v1.png",
         "employee": {
           "@type": "Person",
           "name": "David Colavita",
@@ -141,9 +139,7 @@
             </p>
 
             <div class="hero__actions" aria-label="Primary actions">
-              <a class="btn btn--primary" href="tel:+16474441347"
-                >Call Now</a
-              >
+              <a class="btn btn--primary" href="tel:+16474441347">Call Now</a>
               <a class="btn btn--ghost" href="#calculator"
                 >Use the Calculator</a
               >
@@ -367,12 +363,24 @@
             </div>
 
             <div class="field-grid field-grid--two">
-              <div class="field-group">
+              <div class="field-group field-group--range">
                 <label for="amortization">Amortization</label>
-                <select id="amortization" name="amortization">
-                  <option value="25" selected>25 years</option>
-                  <option value="30">30 years</option>
-                </select>
+
+                <div class="range-control">
+                  <input
+                    id="amortization"
+                    name="amortization"
+                    type="range"
+                    min="1"
+                    max="35"
+                    step="1"
+                    value="25"
+                    aria-describedby="amortizationValue" />
+
+                  <output id="amortizationValue" for="amortization">
+                    25 years
+                  </output>
+                </div>
               </div>
 
               <div class="field-group">

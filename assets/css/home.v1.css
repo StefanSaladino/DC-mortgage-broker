@@ -352,22 +352,21 @@
 
 .calculator-form,
 .calculator-results {
+  display: grid;
+  gap: 1rem;
   padding: clamp(1rem, 2vw, 1.4rem);
   border: 1px solid rgba(255, 255, 255, 0.11);
   border-radius: var(--radius-md);
   background: rgba(255, 255, 255, 0.035);
 }
 
-.calculator-form,
-.calculator-results,
+.calculator-results {
+  align-content: start;
+}
+
 .field-grid,
 .field-group {
   display: grid;
-}
-
-.calculator-form,
-.calculator-results {
-  gap: 1rem;
 }
 
 .field-grid {
@@ -386,14 +385,11 @@
   text-transform: uppercase;
 }
 
+/* Shared visual treatment for calculator controls. */
 .input-wrap,
-select {
+select,
+.range-control {
   width: 100%;
-  min-height: 3.35rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0 0.95rem;
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 0.85rem;
   background:
@@ -410,13 +406,27 @@ select {
     transform 0.2s ease;
 }
 
+.input-wrap,
+select {
+  min-height: 3.35rem;
+}
+
+.input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 0.95rem;
+}
+
 .input-wrap:hover,
-select:hover {
+select:hover,
+.range-control:hover {
   border-color: rgba(255, 255, 255, 0.24);
 }
 
 .input-wrap:focus-within,
-select:focus {
+select:focus,
+.range-control:focus-within {
   border-color: rgba(198, 140, 255, 0.72);
   background:
     linear-gradient(135deg, rgba(159, 52, 255, 0.16), rgba(255, 255, 255, 0.045)),
@@ -473,10 +483,48 @@ select:focus {
   line-height: 1;
 }
 
+/* Amortization range slider. */
+.field-group--range {
+  align-content: start;
+}
+
+.range-control {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.95rem;
+}
+
+.range-control input[type="range"] {
+  width: 100%;
+  min-height: 1.4rem;
+  margin: 0;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.range-control input[type="range"]:focus {
+  outline: 0;
+}
+
+.range-control output {
+  display: inline-flex;
+  justify-content: center;
+  width: fit-content;
+  min-width: 5.4rem;
+  padding: 0.28rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(159, 52, 255, 0.16);
+  color: #e8d2ff;
+  font-size: 0.78rem;
+  font-weight: 850;
+  line-height: 1;
+}
+
+/* Select styling remains for payment frequency. */
 select {
   appearance: none;
   cursor: pointer;
-  padding-right: 3rem;
+  padding: 0 3rem 0 0.95rem;
   outline: 0;
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.025)),
@@ -490,6 +538,7 @@ select option {
   color: var(--white);
 }
 
+/* Buyer and property option toggles. */
 .toggle-row {
   display: flex;
   flex-wrap: wrap;
@@ -511,10 +560,7 @@ select option {
   accent-color: var(--accent);
 }
 
-.calculator-results {
-  align-content: start;
-}
-
+/* Calculator results. */
 .result-card--hero {
   padding: 1.4rem;
   border-radius: var(--radius-md);

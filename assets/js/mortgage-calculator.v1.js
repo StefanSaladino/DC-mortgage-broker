@@ -4,6 +4,7 @@
    - Adds property tax, heating, and condo fees into the visible payment
    - Estimates CMHC/default insurance, Ontario/Toronto land transfer tax,
      first-time buyer rebates, stress-test payment, and GDS/TDS ratios
+   - Supports amortization as a 1-35 year slider
 ========================================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -58,6 +59,14 @@ function setResult(name, value) {
   if (node) node.textContent = value;
 }
 
+/** Updates the visible amortization slider label. */
+function updateAmortizationLabel(amortizationYears) {
+  const output = document.getElementById("amortizationValue");
+  if (!output) return;
+
+  output.textContent = `${amortizationYears} ${amortizationYears === 1 ? "year" : "years"}`;
+}
+
 /**
  * Calculates the minimum down payment using current Canadian purchase rules.
  * - Up to $500,000: 5%
@@ -89,10 +98,8 @@ function calculateInsurancePremium(price, downPayment, amortizationYears) {
 
   if (price <= 0 || baseMortgage <= 0) return 0;
 
-  /* Homes at or above $1.5M generally require at least 20% down and are not insured in this simplified estimator. */
   if (price >= 1500000) return 0;
 
-  /* No insurance estimate is needed when down payment is 20% or more. */
   if (downPaymentPercent >= 0.20) return 0;
 
   let premiumRate = 0;
@@ -105,7 +112,11 @@ function calculateInsurancePremium(price, downPayment, amortizationYears) {
     premiumRate = 0.028;
   }
 
-  /* Conservative note: this keeps the estimate simple for preview. */
+  /*
+    Simple estimator note:
+    Some insured mortgage scenarios with amortizations over 25 years may depend
+    on borrower/property eligibility. This small premium bump keeps the preview conservative.
+  */
   if (amortizationYears > 25 && premiumRate > 0) {
     premiumRate += 0.002;
   }
@@ -188,6 +199,8 @@ function calculateMortgage() {
   const isFirstTimeBuyer = getChecked("firstTimeBuyer");
   const isInToronto = getChecked("inToronto");
 
+  updateAmortizationLabel(amortization);
+
   const minimumDownPayment = calculateMinimumDownPayment(homePrice);
   const effectiveDownPayment = Math.max(enteredDownPayment, minimumDownPayment);
   const downPaymentPercent = homePrice > 0 ? (enteredDownPayment / homePrice) * 100 : 0;
@@ -205,12 +218,6 @@ function calculateMortgage() {
   const monthlyPrincipalInterest = calculateMonthlyMortgagePayment(totalMortgage, interestRate, amortization);
   const monthlyPropertyTax = annualPropertyTax / 12;
 
-  /*
-    Final visible payment:
-    Principal + interest + property tax + heat + condo fees.
-    This directly addresses the client note that tax and heat must be added
-    to the main payment estimate.
-  */
   const totalMonthlyCarryingCost =
     monthlyPrincipalInterest +
     monthlyPropertyTax +
@@ -234,11 +241,6 @@ function calculateMortgage() {
   const stressRate = Math.max(interestRate + 2, 5.25);
   const stressPayment = calculateMonthlyMortgagePayment(totalMortgage, stressRate, amortization);
 
-  /*
-    Qualification ratios:
-    - GDS includes stressed mortgage payment, property tax, heat, and 50% condo fees.
-    - TDS includes GDS items plus other monthly debt.
-  */
   const grossMonthlyIncome = grossAnnualIncome / 12;
   const gdsMonthlyCosts = stressPayment + monthlyPropertyTax + monthlyHeating + monthlyCondoFees * 0.5;
   const tdsMonthlyCosts = gdsMonthlyCosts + monthlyDebt;
@@ -283,7 +285,7 @@ function calculateMortgage() {
   }
 
   if (amortization > 25 && insurancePremium > 0) {
-    warnings.push("Insured 30-year amortization may depend on borrower and property eligibility.");
+    warnings.push("Insured amortizations over 25 years may depend on borrower and property eligibility.");
   }
 
   const warningBox = document.querySelector('[data-result="warnings"]');
