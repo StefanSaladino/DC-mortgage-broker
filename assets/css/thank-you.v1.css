@@ -1,0 +1,104 @@
+/* =========================================================
+   THANK YOU PAGE - DAVID COLAVITA MORTGAGE SITE
+   Purpose:
+   - Styles the post-submission confirmation page.
+   - Keeps thank-you page styles separate from global styles.
+   - Preserves the existing thank-you.html class names.
+========================================================= */
+
+/* =========================================================
+   PAGE WRAPPER
+========================================================= */
+
+.thank-you {
+  position: relative;
+  min-height: 100vh;
+  display: grid;
+  align-items: center;
+  overflow: hidden;
+  padding: calc(var(--header-total-height) + 4rem) 0 4rem;
+  background:
+    radial-gradient(circle at 18% 28%, rgba(159, 52, 255, 0.28), transparent 30%),
+    radial-gradient(circle at 82% 18%, rgba(111, 53, 255, 0.2), transparent 28%),
+    linear-gradient(135deg, #050508, #11101a 55%, #050508);
+}
+
+.thank-you::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      115deg,
+      transparent 0%,
+      transparent 38%,
+      rgba(255, 255, 255, 0.055) 48%,
+      rgba(198, 140, 255, 0.12) 52%,
+      transparent 66%,
+      transparent 100%
+    );
+  opacity: 0.65;
+}
+
+.thank-you::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 35%;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent, #050508);
+}
+
+.thank-you .container {
+  position: relative;
+  z-index: 1;
+}
+
+/* =========================================================
+   CONFIRMATION CARD
+========================================================= */
+
+.thank-you__card {
+  max-width: 48rem;
+  padding: clamp(1.4rem, 4vw, 2.4rem);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(circle at 88% 12%, rgba(159, 52, 255, 0.2), transparent 34%),
+    rgba(255, 255, 255, 0.045);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(14px);
+}
+
+.thank-you__card h1 {
+  margin-bottom: 1rem;
+  color: var(--white);
+  font-size: clamp(2.7rem, 7vw, 5.8rem);
+}
+
+.thank-you__card p:not(.eyebrow) {
+  max-width: 38rem;
+  color: rgba(255, 255, 255, 0.74);
+}
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.thank-you__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  margin-top: 1.5rem;
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 520px) {
+  .thank-you__actions .btn {
+    width: 100%;
+  }
+}
